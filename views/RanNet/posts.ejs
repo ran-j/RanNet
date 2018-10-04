@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Posts</title>
+	<!-- Custom styles for this template -->
+	<link href="/static/css/PostCss.css" rel="stylesheet">
+	<% include ../Fixed/DefaultHead.ejs %>
+</head>
+
+<body>
+
+	<% include ../Fixed/NavBarTest.ejs %>
+
+	<div class="container">
+		<br>
+		<br>
+		<br>
+		<br>
+		<div class="jumbotron jumbotron-fluid">
+			<h1 class="text-center">Bem vindo ao ambiente de teste da RanNet</h1>
+			<p class="text-center">Veja posts recebidos na aba do console.</p>
+		</div>
+	</div>
+
+	<div id="myModal" class="modal">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h1> Json Recebido:<h1>
+					<p id="statusSend"></p>
+		</div>
+
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+	<script src="/static/javascripts/Posts.js"></script>
+
+</body>
+
+</html>

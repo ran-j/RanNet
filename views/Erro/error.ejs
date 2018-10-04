@@ -1,0 +1,10 @@
+<script>
+    var erroCode = "<%= error.status %>";
+    if(erroCode == 404){
+        location.href = "/erropagina";        
+    }
+</script>
+
+<h1><%= message %></h1>
+<h2><%= error.status %></h2>
+<pre><%= error.stack %></pre>
