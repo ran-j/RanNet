@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
 
 router.get("/crearsuperuserrannet",function (req,res){
 	var user = {
-	 email: "660684",
+	matricula: "660684",
 	 nome: "Ranieri",
 	 password:"1234"
 	}	
