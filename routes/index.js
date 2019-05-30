@@ -69,7 +69,7 @@ router.get('/ocr',LoginRequired, function(req, res, next) {
 	res.render('soom');
 });
 
-router.get('/downloadfile/:filename',LoginRequired, function(req, res) {
+router.get('/downloadfile/:filename', function(req, res) {
 	var filename = req.params.filename;
 //	if(filename){
 		console.log(" ");
@@ -157,7 +157,17 @@ var form = new formidable.IncomingForm({multiples:true,maxFieldsSize:20 * 1024 *
 		//form.maxFileSize = 2042220174
 
 		// store all uploads in the /uploads directory
-		//form.uploadDir = DownloadFolder;
+		//form.uploadDir = DownloadFolder;  
+
+		// specify that we want to allow the user to upload multiple files in a single request
+		form.multiples = true;
+
+		form.maxFieldsSize = 2042220174
+
+		form.maxFileSize = 2042220174
+
+		// store all uploads in the /uploads directory
+		form.uploadDir = DownloadFolder;
 
 		// every time a file has been uploaded successfully,
 		// rename it to it's orignal name 
