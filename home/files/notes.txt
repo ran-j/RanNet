@@ -1,0 +1,53 @@
+﻿https://vcenter-vdi01
+
+https://vcenter-cipd01.petrobras.biz
+https://vcenter-cipd02.petrobras.biz
+https://vcenter-cipd03.petrobras.biz	18:15
+https://vcenter-cipd04.petrobras.biz
+https://vcenter-cipd05.petrobras.biz
+https://vcenter-cipd06.petrobras.biz
+https://vcenter-cipd07.petrobras.biz
+https://vcenter-ccti01.petrobras.biz
+
+
+Almir da Silva Farria Junior - PrestServ/BRA/Petrobras@PETROBRAS, Patricia Cherem Ferreira - PrestServ/BRA/Petrobras@Petrobras, lgteixeira@indracompany.com, asilvaf@indracompany.com
+
+
+Venho por meio deste solicitar criação de cofre no Conan.
+
+Descrição: Armazenamento de senhas para chaves SA de aplicações Indra.
+
+Motivo: Armazenamento de senhas para chaves: SACHBOT, SACBOT02 e SAIVSSD.
+
+
+Y28T - patricia cherem
+
+
+Solicito acesso ao console vcenter aos cuidados de Angelo para o servidor NPAA5382.
+
+Nome do servidor: NPAA5382;
+Grupo do AD: GG_RJ_SD_INFRA_ADMINS;
+Suportado por no BDGC: N2-SD2_SUPORTE_AVANCADO.
+
+Solicitação para acesso ao vCenter para servidor NPAA5382.
+
+
+
+
+
+
+
+----- Solicito acesso a internet para chaves AS em nota, aos cuidados de Alan - Y853.
+
+Solicitação para acesso a internet para chaves AS.
+
+Acesso necessário para deploy de aplicações desenvolvidas para contrato Indra no servidor de testes NPAA5382, e futuramente em servidores de produção que serão instalados e configurados.
+
+Mensagem de erro em anexo, encontrada ao realizar tentativa de download de imagem necessária para gerar build de aplicações web no servidor, com proxy devidamente configurado.
+
+Serão necessários acessos aos seguintes domínios bem como seus seus subdomínios:
+
+docker.com;
+docker.io.
+
+Chavas que realizam acesso ao servidor: ASA55O, ASBJ7F, ASADAX.

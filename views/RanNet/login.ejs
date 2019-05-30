@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Login</title>
+  <% include ../Fixed/DefaultHead.ejs %>
+  <link href="/static/css/Style2.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div id="login-button">
+    <img src="/static/images/login-w-icon.png">
+  </div>
+  <div id="container">
+    <h1>Log In</h1>
+    <form action="/" method="post" id="myform">
+      <input type="text" name="matricula" placeholder="E-mail">
+      <input type="password" name="logpassword" placeholder="Password">
+
+      <a class="btnsub" href="#" onclick="document.getElementById('myform').submit()" type="submit">Log in</a>
+
+    </form>
+  </div>
+
+
+  <script>
+    $('#login-button').click(function () {
+      $('#login-button').fadeOut("slow", function () {
+        $("#container").fadeIn();
+        TweenMax.from("#container", .4, { scale: 0, ease: Sine.easeInOut });
+        TweenMax.to("#container", .4, { scale: 1, ease: Sine.easeInOut });
+      });
+    });
+
+    $(".close-btn").click(function () {
+      TweenMax.from("#container", .4, { scale: 1, ease: Sine.easeInOut });
+      TweenMax.to("#container", .4, { left: "0px", scale: 0, ease: Sine.easeInOut });
+      $("#container, #forgotten-container").fadeOut(800, function () {
+        $("#login-button").fadeIn(800);
+      });
+    });
+
+<% if (mostrarerro === 1) { %>
+      alert("<%= msg %>");   
+  <% } %> 
+  </script>
+
+</body>
+
+</html>
