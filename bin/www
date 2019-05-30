@@ -37,23 +37,10 @@ setInterval(() => {
   latency.set(latencyValue);
 }, 100);
 
-http.createServer((req, res) => {
-  // Increment the counter, counter will eq 1
-  currentReqs.inc();
-  req.on('end', () => {
-    // Decrement the counter, counter will eq 0
-    currentReqs.dec();
-  });
-});
-
-http.createServer((req, res) => {
-  reqsec.mark()
-  res.end({ success: true })
-})
-
 var app = require('../app');
 var debug = require('debug')('rannet:server');
-var http = require('http');
+var cluster = require('cluster');
+var numCPUs = require('os').cpus().length;
 
 app.use(io.expressErrorHandler())
 
@@ -64,19 +51,51 @@ app.use(io.expressErrorHandler())
 var port = normalizePort(process.env.PORT || '81');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+if (cluster.isMaster) {
+  // Fork workers.
+  for (var i = 0; i < numCPUs; i++) {
+    console.log('forking process', i)
+    cluster.fork();
+  }
 
-var server = http.createServer(app);
+  // If a worker dies, log it to the console and start another worker.
+  cluster.on('exit', function (worker, code, signal) {
+    console.log('Worker ' + worker.process.pid + ' died.');
+    cluster.fork();
+  });
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+  // Log when a worker starts listening
+  cluster.on('listening', function (worker, address) {
+    console.log('Worker started with PID ' + worker.process.pid + '.');
+  });
+}
+else {
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  /**
+   * Create HTTP server.
+   */
+
+  var server = http.createServer(app);
+
+  http.createServer((req, res) => {
+    // Increment the counter, counter will eq 1
+    currentReqs.inc();
+    req.on('end', () => {
+      // Decrement the counter, counter will eq 0
+      currentReqs.dec();
+      reqsec.mark()
+      res.end({ success: true })
+    });
+  });
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
 
 /**
  * Normalize a port into a number, string, or false.
