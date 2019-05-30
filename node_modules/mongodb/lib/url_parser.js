@@ -212,6 +212,7 @@ function parseConnectionString(url, options) {
 
   for (let i = 0; i < hosts.length; i++) {
     let r = parser.parse(f('mongodb://%s', hosts[i].trim()));
+    if (r.path && r.path.indexOf('.sock') !== -1) continue;
     if (r.path && r.path.indexOf(':') !== -1) {
       // Not connecting to a socket so check for an extra slash in the hostname.
       // Using String#split as perf is better than match.
@@ -354,7 +355,7 @@ function parseConnectionString(url, options) {
           if (_host.indexOf('?') !== -1) _host = _host.split(/\?/)[0];
         }
 
-        // No entry returned for duplicate servr
+        // No entry returned for duplicate server
         if (deduplicatedServers[_host + '_' + _port]) return null;
         deduplicatedServers[_host + '_' + _port] = 1;
 

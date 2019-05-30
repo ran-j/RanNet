@@ -3,10 +3,59 @@
 /**
  * Module dependencies.
  */
+const io = require('@pm2/io')
+var http = require('http');
+
+io.init({
+  metrics: {
+    network: {
+      ports: true
+    }
+  }
+})
+
+const currentReqs = io.counter({
+  name: 'Realtime request count',
+  id: 'app/realtime/requests'
+});
+
+const reqsec = io.meter({
+  name: 'req/sec',
+  id: 'app/requests/volume'
+})
+
+const latency = io.metric({
+  name: 'latency',
+  type: 'histogram',
+  measurement: 'mean'
+});
+
+var latencyValue = 0;
+
+setInterval(() => {
+  latencyValue = Math.round(Math.random() * 100);
+  latency.set(latencyValue);
+}, 100);
+
+http.createServer((req, res) => {
+  // Increment the counter, counter will eq 1
+  currentReqs.inc();
+  req.on('end', () => {
+    // Decrement the counter, counter will eq 0
+    currentReqs.dec();
+  });
+});
+
+http.createServer((req, res) => {
+  reqsec.mark()
+  res.end({ success: true })
+})
 
 var app = require('../app');
 var debug = require('debug')('rannet:server');
 var http = require('http');
+
+app.use(io.expressErrorHandler())
 
 /**
  * Get port from environment and store in Express.

@@ -358,12 +358,8 @@ class TopologyBase extends EventEmitter {
     return this.s.coreTopology.lastIsMaster();
   }
 
-  getServer(options) {
-    return this.s.coreTopology.getServer(options);
-  }
-
-  getConnection(options) {
-    return this.s.coreTopology.getConnection(options);
+  selectServer(selector, options, callback) {
+    return this.s.coreTopology.selectServer(selector, options, callback);
   }
 
   /**
@@ -372,16 +368,6 @@ class TopologyBase extends EventEmitter {
    */
   unref() {
     return this.s.coreTopology.unref();
-  }
-
-  auth() {
-    var args = Array.prototype.slice.call(arguments, 0);
-    this.s.coreTopology.auth.apply(this.s.coreTopology, args);
-  }
-
-  logout() {
-    var args = Array.prototype.slice.call(arguments, 0);
-    this.s.coreTopology.logout.apply(this.s.coreTopology, args);
   }
 
   /**
@@ -393,7 +379,7 @@ class TopologyBase extends EventEmitter {
     return this.s.coreTopology.connections();
   }
 
-  close(forceClosed) {
+  close(forceClosed, callback) {
     // If we have sessions, we want to individually move them to the session pool,
     // and then send a single endSessions call.
     if (this.s.sessions.length) {
@@ -404,26 +390,22 @@ class TopologyBase extends EventEmitter {
       this.s.sessionPool.endAllPooledSessions();
     }
 
-    this.s.coreTopology.destroy({
-      force: typeof forceClosed === 'boolean' ? forceClosed : false
-    });
-
     // We need to wash out all stored processes
     if (forceClosed === true) {
       this.s.storeOptions.force = forceClosed;
       this.s.store.flush();
     }
+
+    this.s.coreTopology.destroy(
+      {
+        force: typeof forceClosed === 'boolean' ? forceClosed : false
+      },
+      callback
+    );
   }
 }
 
 // Properties
-Object.defineProperty(TopologyBase.prototype, 'isMasterDoc', {
-  enumerable: true,
-  get: function() {
-    return this.s.coreTopology.lastIsMaster();
-  }
-});
-
 Object.defineProperty(TopologyBase.prototype, 'bson', {
   enumerable: true,
   get: function() {
