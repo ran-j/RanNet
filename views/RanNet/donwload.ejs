@@ -15,53 +15,7 @@
 
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
-			 aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<a class="navbar-brand" href="/home">RanNet</a>
-
-			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item">
-						<a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/uploads">Uploads</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/downloads">Downloads</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/chat">Chat</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/ocr">OCR</a>
-					</li>
-				</ul>
-
-				<ul class="navbar-nav">
-					<!-- PROFILE DROPDOWN - scrolling off the page to the right -->
-					<li class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" id="navDropDownLink" data-toggle="dropdown" aria-haspopup="true"
-						 aria-expanded="false">
-							Profile
-						</a>
-						<div class="dropdown-menu" aria-labelledby="navDropDownLink">
-							<a class="dropdown-item" href="/preferences">Preferences</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="/logout">Logout</a>
-						</div>
-					</li>
-				</ul>
-
-			</div>
-		</div>
-
-	</nav>
+	<% include ../Fixed/NavBar.ejs %>
 
 	<br>
 	<br>
@@ -69,7 +23,7 @@
 	<br>
 	<div class="container">
 
-		<div class="jumbotron">
+		<div class="jumbotron" style="padding: 2rem 1rem;">
 			<h2>Downloads!</h2>
 			<p>Lista com todos os arquivos armazenados no servidor:.</p>
 
@@ -79,34 +33,46 @@
 					<tr>
 						<th>ID</th>
 						<th>Nome</th>
+						<th>Criado por</th>
 						<th>Data</th>
 						<th>Ação</th>
 					</tr>
 				</thead>
 				<tbody>
 					<%if (donwloadslist) { %>
-					<% for(var i=0; i<donwloadslist.length; i++) { %>
-					<tr>
-						<td>
-							<%= i %>
-						</td>
-						<td>
-							<%= donwloadslist[i].nome %>
-						</td>
-						<td>
-							<%= donwloadslist[i].data %>
-						</td>
-						<td class="actions">
-							<a class="fa fa-download" href="/downloadfile/<%= donwloadslist[i].link %>" target="_blank"> Baixar</a>
-							<a class="fa fa-trash" href="/deletefile/<%= donwloadslist[i].link %>" target="_blank"> Apagar</a>
-						</td>
-					</tr>
-					<% } %>
+						<% for(var i=0; i<donwloadslist.length; i++) { %>
+						<tr>
+							<td>
+								<%= i %>
+							</td>
+							<td>
+								<%= donwloadslist[i].name %>
+							</td>
+							<td>
+								<%= donwloadslist[i].creat_by.name %>
+							</td>
+							<td>
+								<%= donwloadslist[i].created_at.toLocaleString() %>
+							</td>
+							<td class="actions">
+								<a class="fa fa-download" href="/downloadfile/<%= donwloadslist[i].link %>" target="_blank"> Baixar</a>
+								<a class="fa fa-trash" href="/deletefile/<%= donwloadslist[i].link %>" onclick="awaitAndreload()" target="_blank"> Apagar</a>
+							</td>
+						</tr>
+						<% } %>
 					<% } %>
 				</tbody>
 			</table>
 		</div>
 	</div>
 </body>
+
+<script>
+ function awaitAndreload() {
+	setTimeout(function() {
+		location.reload(true)
+	},1000)
+ }
+</script>
 
 </html>

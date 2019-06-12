@@ -4,27 +4,36 @@
 <head>
   <title>Login</title>
   <% include ../Fixed/DefaultHead.ejs %>
-  <link href="/static/css/Style2.css" rel="stylesheet">
+  <link href="/static/css/login.css" rel="stylesheet">
 </head>
 
 <body>
 
   <div id="login-button">
-    <img src="/static/images/login-w-icon.png">
+    <img src="/static/img/login-w-icon.png">
   </div>
   <div id="container">
     <h1>Log In</h1>
-    <form action="/" method="post" id="myform">
+    <form action="/" method="POST" id="myform">
       <input type="text" name="matricula" placeholder="E-mail">
-      <input type="password" name="logpassword" placeholder="Password">
-
+      <input type="password" name="logpassword" placeholder="Password" id="pwd">
       <a class="btnsub" href="#" onclick="document.getElementById('myform').submit()" type="submit">Log in</a>
-
     </form>
   </div>
 
-
   <script>
+    var input = document.getElementById("pwd");
+    // Execute a function when the user releases a key on the keyboard
+    input.addEventListener("keyup", function (event) {
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById('myform').submit()
+      }
+    });
+
     $('#login-button').click(function () {
       $('#login-button').fadeOut("slow", function () {
         $("#container").fadeIn();
@@ -41,9 +50,18 @@
       });
     });
 
-<% if (mostrarerro === 1) { %>
-      alert("<%= msg %>");   
-  <% } %> 
+    <% if (mostrarerro === 1) { %>
+      swal("oops", "<%= msg %>", "error");
+    <% } %> 
+
+    <% if (errors) { %>
+      <% errors.forEach(function(msg) { %>
+          swal("oops", "<%= msg.msg %> for <%= msg.param %>", "error");
+      <% }); %>
+    <% } %> 
+
+
+    
   </script>
 
 </body>

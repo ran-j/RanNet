@@ -1,7 +1,0 @@
-proxy=http://adax:rA741891@inet-sys.petrobras.com.br:804/
-https-http://adax:rA741891@inet-sys.petrobras.com.br:804/
-registry=https://registry.npmjs.org
-
-
-var proxyUrl = "http://adax:rA741891@inet-sys.petrobras.com.br:804";
-var proxiedRequest = request.defaults({'proxy': proxyUrl});

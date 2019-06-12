@@ -1,38 +1,40 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <a class="navbar-brand" href="/home">RanNet</a>
-        
+
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
+                <li class="nav-item <%= home %>">
                     <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%= uploads %>">
                     <a class="nav-link" href="/uploads">Uploads</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%= downloads %>">
                     <a class="nav-link" href="/downloads">Downloads</a>
                 </li>
-        <li class="nav-item">
+                <li class="nav-item <%= chat %>">
                     <a class="nav-link" href="/chat">Chat</a>
                 </li>
-        <li class="nav-item">
-                    <a class="nav-link" href="/ocr">OCR</a>
+                <li class="nav-item <%= notes %>">
+                    <a class="nav-link" href="/notes">Notes</a>
                 </li>
-            </ul>           
+            </ul>
 
             <ul class="navbar-nav ">
                 <!-- PROFILE DROPDOWN - scrolling off the page to the right -->
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navDropDownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Profile
-            </a>
+                    <a href="#" class="nav-link dropdown-toggle" id="navDropDownLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Profile
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="navDropDownLink">
-                        <a class="dropdown-item" href="/preferences">Preferences</a>
+                        <a class="dropdown-item" href="/changpwd">Change password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout">Logout</a>
                     </div>

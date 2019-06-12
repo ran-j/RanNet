@@ -5,7 +5,7 @@ var RavenSchema = new mongoose.Schema({
       type: String, 
       required: true
     },     
-  });
+});
 
 var Raven = mongoose.model('Raven', RavenSchema);
 

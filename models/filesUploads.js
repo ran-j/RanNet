@@ -1,23 +1,28 @@
 var mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 var FilesUploadSchema = new mongoose.Schema({
-    nome: {
-      type: String, 
-      trim: true
-    },     
-    data: {
-      type: String,
-      required: true,
-    },
-    link: {
-        type: String,
-        required: true,
-    },
-    status: {
-      type: String,
-      required: true,
-    },
-  });
+  name: {
+    type: String,
+    trim: true
+  },
+  link: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+  },
+  creat_by: {
+    type: Schema.Types.ObjectId,
+    ref: 'Users'
+  },
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
+});
 
 var FilesUpload = mongoose.model('FilesUpload', FilesUploadSchema);
 

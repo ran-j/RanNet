@@ -14,7 +14,7 @@ var FlowMeterSchema = new mongoose.Schema({
       type: String,
       required: true,
     }
-  });
+});
 
 var FlowMeter = mongoose.model('FlowMeter', FlowMeterSchema);
 

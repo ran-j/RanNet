@@ -3,99 +3,38 @@
 /**
  * Module dependencies.
  */
-const io = require('@pm2/io')
-var http = require('http');
-
-io.init({
-  metrics: {
-    network: {
-      ports: true
-    }
-  }
-})
-
-const currentReqs = io.counter({
-  name: 'Realtime request count',
-  id: 'app/realtime/requests'
-});
-
-const reqsec = io.meter({
-  name: 'req/sec',
-  id: 'app/requests/volume'
-})
-
-const latency = io.metric({
-  name: 'latency',
-  type: 'histogram',
-  measurement: 'mean'
-});
-
-var latencyValue = 0;
-
-setInterval(() => {
-  latencyValue = Math.round(Math.random() * 100);
-  latency.set(latencyValue);
-}, 100);
 
 var app = require('../app');
-var debug = require('debug')('rannet:server');
-var cluster = require('cluster');
-var numCPUs = require('os').cpus().length;
-
-app.use(io.expressErrorHandler())
+var debug = require('debug')('rannet2:server');
+var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '81');
+var port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
-if (cluster.isMaster) {
-  // Fork workers.
-  for (var i = 0; i < numCPUs; i++) {
-    console.log('forking process', i)
-    cluster.fork();
-  }
+/**
+ * Create HTTP server.
+ */
 
-  // If a worker dies, log it to the console and start another worker.
-  cluster.on('exit', function (worker, code, signal) {
-    console.log('Worker ' + worker.process.pid + ' died.');
-    cluster.fork();
-  });
+var server = http.createServer(app);
 
-  // Log when a worker starts listening
-  cluster.on('listening', function (worker, address) {
-    console.log('Worker started with PID ' + worker.process.pid + '.');
-  });
-}
-else {
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
-  /**
-   * Create HTTP server.
-   */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
-  var server = http.createServer(app);
-
-  http.createServer((req, res) => {
-    // Increment the counter, counter will eq 1
-    currentReqs.inc();
-    req.on('end', () => {
-      // Decrement the counter, counter will eq 0
-      currentReqs.dec();
-      reqsec.mark()
-      res.end({ success: true })
-    });
-  });
-
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
-
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
-}
+/**
+ * Socket.io
+ */
+var socketApi = require('../SocketsApi/SocketApi');
+var io = socketApi.io;
+io.attach(server);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -126,9 +65,9 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -151,8 +90,8 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
   debug('Listening on ' + bind);
 }
