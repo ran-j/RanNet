@@ -1,5 +1,7 @@
 var Raven = require('../../models/Raven');
 
+var path = require('path');
+
 var home = path.join(__dirname.replace("routes\\Controllers", ""), '/home');
 const DownloadFolder = path.join(home, '/files');
 
