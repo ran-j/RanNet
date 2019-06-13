@@ -119,6 +119,7 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>`)
+                ScrollChat()
             }
 
             const RenderBotMessage = function (data) {
@@ -140,6 +141,11 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>`)
+                ScrollChat()
+            }
+
+            const ScrollChat = function() {
+                document.getElementsByClassName("chatbox__body")[0].scrollTop = 50000
             }
 
             RenderBotMessage("Hey, I'm a fork of original elizabot 1966.")
