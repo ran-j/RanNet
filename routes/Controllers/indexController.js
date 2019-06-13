@@ -211,7 +211,10 @@ const uploadProcess = (req, res, next) => {
     try {
         
         fs.rename( req.files["uploads[]"].path, path.join(DownloadFolder,  req.files["uploads[]"].name.replace(" ","-")) , (err) => {
-            if(err) return res.end("fail")
+            if(err) {
+                console.log(err)
+                return res.status(500).end("fail")
+            }
             new UploadModel({
 				name: req.files["uploads[]"].name,
 				creat_by: req.session.userId,
@@ -221,14 +224,14 @@ const uploadProcess = (req, res, next) => {
                 res.end('success');
             }).catch((err) =>{
                 console.log(err);
-				res.end("fail");
+				res.status(500).end("fail");
             })
         });
 
         // res.end("fail")
     } catch (error) {
         console.error(error)
-        res.end('fail');
+        res.status(500).end('fail');
     }
 }
 
