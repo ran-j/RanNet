@@ -896,13 +896,13 @@ class ElizaBot {
 				}
 				var rpl = reasmbs[ri];
 				if (this.debug)
-					alert('match:\nkey: ' + elizaKeywords[k][0] +
+					console.log('match:\nkey: ' + elizaKeywords[k][0] +
 						'\nrank: ' + elizaKeywords[k][1] +
 						'\ndecomp: ' + decomps[i][0] +
 						'\nreasmb: ' + rpl +
 						'\nmemflag: ' + memflag);
 				if (rpl.search('^goto ', 'i') == 0) {
-					ki = this._getRuleIndexByKey(rpl.substring(5));
+					let ki = this._getRuleIndexByKey(rpl.substring(5));
 					if (ki >= 0)
 						return this._execRule(ki);
 				}
