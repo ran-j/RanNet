@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Ran-Net</title>
+
+    <!-- Icons core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <% include ../Fixed/DefaultHead.ejs %>
+
+</head>
+
+<body>
+
+    <% include ../Fixed/NavBar.ejs %>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+
+        <div class="jumbotron" style="padding: 2rem 1rem;">
+                <h2>Usuário!</h2>
+                <p class="text-center"><a class="btn btn-primary btn-lg" href="#" onclick="createUser()" role="button">Novo
+                        usuário</a></p>
+            <p>Lista com todos os usuários.</p>
+
+            <table class="table table-striped table-dark">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Admin</th>
+                        <th>login</th>
+                        <th>Join in</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%if (users) { %>
+                        <% for(var i=0; i<users.length; i++) { %>
+                            <tr>
+                                <td>
+                                    <%= users[i]._id %>
+                                </td>
+                                <td>
+                                    <%= users[i].name %>
+                                </td>
+                                <td>
+                                    <%= users[i].admin %>
+                                </td>
+                                <td>
+                                    <%= users[i].matricula %>
+                                </td>
+                                <td>
+                                    <%= users[i].created_at.toLocaleString() %>
+                                </td>
+                                <td class="actions">
+                                    <a class="fa fa-trash" href="#" onclick="deleteUser('<%= users[i]._id %>')" > Apagar</a>
+                                    <a class="fa fa-lock" href="#" onclick="resetPwD('<%= users[i]._id %>')" > Reset </a>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <% include ../Fixed/bot.ejs %>
+    </div>
+</body>
+
+<script>
+    function deleteUser(user) {
+        swal({
+            title: "Deletar usuário?",
+            text: "Nescessario confirmação para prosseguir",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sim, resetar",
+            cancelButtonText: "Não",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.post( "/deleteUser",
+                {
+                    "id" : user
+                }, function( data ) {
+                    console.log( data );
+                    swal("Atenção!", data, "warning");
+                    setTimeout(function () {
+                        location.reload(true)
+                    }, 1000)
+                });
+            }
+        })
+    }
+
+    function resetPwD (user) {
+        swal({
+            title: "Resetar senha do usuário?",
+            text: "Nescessario confirmação para prosseguir",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sim, resetar",
+            cancelButtonText: "Não",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.post( "/resetUser",
+                {
+                    "id" : user
+                }, function( data ) {
+                    console.log( data );
+                    swal("Atenção!", data, "warning");
+                });
+            }
+        })
+    }
+
+    function createUser() {
+        swal({
+            title: "Criar usuário!",
+            text: "Nome do usuário:",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            animation: "slide-from-top",
+            inputPlaceholder: "Nome"
+        }, function (username) {
+            if (username === false) return false;
+
+            if (username === "") {
+                swal.showInputError("Campo obrigatório!");
+                return false
+            }
+
+            swal({
+                title: "Criar usuário!",
+                text: "Login do usuário:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "Login"
+            }, function (login) {
+                if (login === false) return false;
+
+                if (login === "") {
+                    swal.showInputError("Campo obrigatório!");
+                    return false
+                }
+
+                $.post( "/createUser",
+                {
+                    "name" : username,
+                    "login" : login
+                }, function( data ) {
+                    swal("Atenção!", data, "warning");
+                });
+
+            });
+            
+        });
+    }
+</script>
+
+</html>

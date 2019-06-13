@@ -19,6 +19,10 @@ var UserSchema = new mongoose.Schema({
   admin: {
     type: Boolean,
     default : false
+  },
+  created_at: {
+    type: Date,
+    default: Date.now
   }
 });
 
@@ -41,7 +45,7 @@ UserSchema.statics.changepwd = (userId,pwd, callback) => {
   Users.findById(userId).exec((error, ActualUser) => {
     if (err) return callback(error)
 
-    if (ActualUser === null) {
+    if (!ActualUser) {
       var err = new Error('User not found.');
       err.status = 401;
       return callback(err);
@@ -53,17 +57,6 @@ UserSchema.statics.changepwd = (userId,pwd, callback) => {
 
   });
 }
-
-UserSchema.pre('save', (next) => {
-  var user = this;
-  bcrypt.hash(user.password, 10,(err, hash) => {
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
-    next();
-  })
-});
 
 var Users = mongoose.model('Users', UserSchema);
 

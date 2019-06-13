@@ -3,6 +3,7 @@ var router = express.Router();
 var controller = require("./Controllers/indexController")
 var LoginRequired = require('../Middlewares/LoginRequired');
 var AlreadyLogin = require('../Middlewares/AlreadyLogin');
+var adminOnly = require('../Middlewares/AdminOnly');
 
 const formidableMiddleware = require('express-formidable');
 const { check } = require('express-validator/check');
@@ -45,7 +46,25 @@ router.get('/downloads', controller.downloadPage)
 /* GET file. */
 router.get('/downloadfile/:filename', controller.downloadFile)
 
+/* GET delete file. */
 router.get('/deletefile/:filename', controller.deleteFile)
+
+/* GET change password. */
+router.get('/changpwd', controller.changePwd)
+
+router.post('/changpwd', controller.changePwdPost)
+
+/* GET user list. */
+router.get('/users',adminOnly, controller.userList)
+
+/* POST create a user. */
+router.post('/createUser',adminOnly, controller.createUser)
+
+/* POST rest password. */
+router.post('/resetUser',adminOnly, controller.resetUser)
+
+/* POST delete user. */
+router.post('/deleteUser',adminOnly, controller.deleteUser)
 
 router.use(formidableMiddleware());
 

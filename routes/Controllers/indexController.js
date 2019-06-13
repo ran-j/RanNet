@@ -9,6 +9,7 @@ var path = require('path');
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
 var socket = require("../../SocketsApi/SocketApi")
+var bcrypt = require('bcrypt');
 
 var home = path.join(__dirname.replace("routes\\Controllers", ""), '/home');
 const DownloadFolder = path.join(home, '/files');
@@ -23,6 +24,115 @@ const DownloadFolder = path.join(home, '/files');
 const index = (req, res, next) => {
     ChangeEfect('home', res)
     res.render("RanNet/index")
+}
+
+/**
+ * Get User list
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const userList = (req, res, next) => {
+    user.find({}).lean().exec((err, users) => {
+        res.render("RanNet/users", {users})
+    })
+}
+
+/**
+ * Create user
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const createUser = (req, res, next) => {
+
+    bcrypt.hash("1234", 10,(err, hash) => {
+        if (err) {
+            return next(err);
+        }
+        new user({
+            matricula : req.body.login,
+            name : req.body.name,
+            password : hash
+        }).save().then(() => res.end("success")).catch((err) => {
+            console.log(err)
+            res.end(err.code == 11000 ? "Login já em uso" : "Erro ao criar usuário")
+        })
+    })
+     
+}
+
+/**
+ * Reset user pwd
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const resetUser = (req, res, next) => {
+    bcrypt.hash("1234", 10,(err, hash) => {
+        if (err) {
+            console.log(err)
+            return res.end("Erro ao realizar reset")
+        }
+        user.changepwd(req.body.id, hash, (err) => {
+            if(err) return res.end("Erro ao realizar reset")
+            res.end("Realizado com sucesso")
+        })
+    })
+}
+
+/**
+ * Delete user
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const deleteUser = (req, res, next) => {
+    user.findByIdAndRemove(req.body.id).exec((err, data) => {
+        if(err) return res.end("Erro ao apagar arquivo")
+        res.end("Realizado com sucesso")
+    })
+}
+
+/**
+ * Change pwd
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const changePwd = (req, res, next) => {
+    res.render("RanNet/pwd")
+}
+
+/**
+ * Change pwd post
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns Any
+ */
+const changePwdPost = (req, res, next) => {
+    user.authenticate(req.session.matricula, req.body.pwdAtual, (error, usr) => {
+        if (error || !usr) {
+            res.end("Senha informada incorreta")
+        } else {
+            bcrypt.hash(req.body.pwd, 10,(err, hash) => {
+                if (err) {
+                    console.log(err)
+                    return res.end("Erro ao realizar troca de senha")
+                }
+                user.changepwd(usr._id, hash, (err) => {
+                    if(err) return res.end("Erro ao trocar senha")
+                    res.end("Realizado com sucesso")
+                })
+            })
+        }
+    })
 }
 
 /**
@@ -192,7 +302,8 @@ const loginAuth = (req, res, next) => {
         if (error || !user) {
             res.render('RanNet/login', { msg: "Senha ou matrícula incorreta", mostrarerro: 1, errors: [] });
         } else {
-            res.locals.admin = true
+            res.locals.admin = user.admin
+            req.session.admin = user.admin
             req.session.userId = user._id;
             req.session.matricula = user.matricula;
             return res.redirect('/home');
@@ -281,6 +392,12 @@ const ChangeEfect = (dest, res) => {
 
 module.exports = {
     index,
+    userList,
+    changePwdPost,
+    createUser,
+    resetUser,
+    deleteUser,
+    changePwd,
     loginAuth,
     loginPage,
     logout,

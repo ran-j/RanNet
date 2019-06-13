@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ran-Net</title>
+    <% include ../Fixed/DefaultHead.ejs %>
+</head>
+
+<body>
+
+    <% include ../Fixed/NavBar.ejs %>
+
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="jumbotron">
+            <h1 class="text-center">Troca de senha!</h1>
+
+            <form action="/action_page.php" method="POST" onsubmit="return validateMyForm();">
+                <div class="form-group">
+                    <label for="email">Senha atual</label>
+                    <input type="password" class="form-control" id="pwdAtual">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Nova senha</label>
+                    <input type="password" class="form-control" id="pwd">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Conirmar nova senha</label>
+                    <input type="password" class="form-control" id="npwd">
+                </div>
+                <div class="text-center"> 
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+
+        <% include ../Fixed/bot.ejs %>
+
+        <script>
+
+            function validateMyForm() {
+                var passwd = document.getElementById("pwdAtual").value
+                var pwd = document.getElementById("pwd").value
+                var npwd = document.getElementById("npwd").value
+                
+                if(!passwd) {
+                    swal("Erro!", 'Favor informar a senha', "error");
+                    return false
+                } 
+
+                if(!pwd) {
+                    swal("Erro!", 'Favor informar a nova senha', "error");
+                    return false
+                } 
+
+                if(!npwd) {
+                    swal("Erro!", 'Favor confirmar a nova senha', "error");
+                    return false
+                } 
+
+                if(pwd != npwd) {
+                    swal("Erro!", 'Novas senha não batem.', "error");
+                    return false
+                }
+
+                $.post( "/changpwd",
+                {
+                    "pwdAtual" : passwd,
+                    "pwd" : pwd
+                }, function( data ) {
+                    swal("Atenção!", data, "warning");
+                    console.log( data );
+                });
+
+                return false;
+            }
+            
+        </script>
+
+    </div>
+</body>
+
+</html>
