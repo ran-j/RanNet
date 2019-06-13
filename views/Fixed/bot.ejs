@@ -86,10 +86,22 @@
         $(document).ready(function () {
 
             const sendMessage = function (mgs) {
-                let [dateuser,timeuser] = (new Date().toLocaleString()).split(" ")
-
+                
                 $chatInput.val('')
+                RenderUserMessage(mgs)
 
+                $.post( "/eliza/say",
+                {
+                   "input" : mgs
+                }, function( data ) {
+                    console.log( data );
+                    RenderBotMessage(data)
+                });
+                    
+            }
+
+            const RenderUserMessage = function(mgs) {
+                let [dateuser,timeuser] = (new Date().toLocaleString()).split(" ")
                 $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--right">
                     <div class="chatbox_timing">
                         <ul>
@@ -107,32 +119,30 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>`)
-
-                $.post( "/eliza/say",
-                {
-                   "input" : mgs
-                }, function( data ) {
-                    console.log( data );
-                    let [date,time] = (new Date().toLocaleString()).split(" ")
-                    $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--left">
-                        <div class="chatbox_timing">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-calendar"></i> ${date}</a></li>
-                                <li><a href="#"><i class="fa fa-clock-o"></i> ${time}</a></a></li>
-                            </ul>
-                        </div>
-                        <img src="/static/img/Eliza.png" alt="Picture">
-                        <div class="clearfix"></div>
-                        <div class="ul_section_full">
-                            <ul class="ul_msg">
-                                <li><strong>Elizabot</strong></li>
-                                <li>${data}</li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>`)
-                });
             }
+
+            const RenderBotMessage = function (data) {
+                let [date,time] = (new Date().toLocaleString()).split(" ")
+                $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--left">
+                    <div class="chatbox_timing">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-calendar"></i> ${date}</a></li>
+                            <li><a href="#"><i class="fa fa-clock-o"></i> ${time}</a></a></li>
+                        </ul>
+                    </div>
+                    <img src="/static/img/Eliza.png" alt="Picture">
+                    <div class="clearfix"></div>
+                    <div class="ul_section_full">
+                        <ul class="ul_msg">
+                            <li><strong>Elizabot</strong></li>
+                            <li>${data}</li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>`)
+            }
+
+            RenderBotMessage("Hey, I'm a fork of original elizabot 1966.")
 
             var $chatbox = $('.chatbox'),
                 $chatboxTitle = $('.chatbox__title')

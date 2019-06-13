@@ -4,7 +4,7 @@
     right: 30px;
     width: 25%;
     height: 80%;
-    background-color: #fff;
+    /* background-color: #fff; */
     font-family: 'Lato', sans-serif;
 
     -webkit-transition: all 600ms cubic-bezier(0.19, 1, 0.22, 1);
