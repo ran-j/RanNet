@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator/check');
 
 const user = require("../../models/users")
 const UploadModel = require("../../models/filesUploads")
+const FlowMT = require("../../models/flowMeter")
 
 var path = require('path');
 var fs = require('fs');
@@ -248,11 +249,11 @@ const postRanNet = (req, res, next) => {
     console.log(JSON.stringify(req.body, null, 2));
     
     if(req.body.data){
-        new FlowMT({
-			dado: req.body.data,
-			data: data,
-			hora:horaAtual
-		}).save().catch(console.error)
+        // new FlowMT({
+		// 	dado: req.body.data,
+		// 	data: data,
+		// 	hora:horaAtual
+		// }).save().catch(console.error)
     }
 
     socket.sendNotification(req.body)

@@ -53,9 +53,10 @@
 			}
 
 			socket.on('jsonpost', function(JsonRe){
-				console.log(JsonRe);		 
+				console.log(JsonRe, "\n global variabel 'window.obj'");		 
 				$('#statusSend').text("Json Recebido, veja na aba console (aperte 'F12')");
 				modal.style.display = "block";
+				window.obj = JsonRe
 
 				window.setTimeout(function () {
 					modal.style.display = "none";
