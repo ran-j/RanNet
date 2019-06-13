@@ -79,7 +79,7 @@ app.use((req, res, next) => {
   res.locals.downloads = ''
   res.locals.chat = ''
   res.locals.notes = ''
-  res.locals.admin = req.session.matricula
+  res.locals.admin = req.session.admin
   next();
 })
 

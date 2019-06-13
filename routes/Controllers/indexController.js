@@ -302,7 +302,6 @@ const loginAuth = (req, res, next) => {
         if (error || !user) {
             res.render('RanNet/login', { msg: "Senha ou matrícula incorreta", mostrarerro: 1, errors: [] });
         } else {
-            res.locals.admin = user.admin
             req.session.admin = user.admin
             req.session.userId = user._id;
             req.session.matricula = user.matricula;
