@@ -16,7 +16,7 @@
         </div>
         <div class="chatbox__body">
 
-            <div class="chatbox__body__message chatbox__body__message--left">
+            <!-- <div class="chatbox__body__message chatbox__body__message--left">
 
                 <div class="chatbox_timing">
                     <ul>
@@ -32,10 +32,10 @@
                         <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
                     </ul>
                     <div class="clearfix"></div>
-                    <!-- <ul class="ul_msg2">
+                    <ul class="ul_msg2">
                         <li><a href="#"><i class="fa fa-pencil"></i> </a></li>
                         <li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
-                    </ul> -->
+                    </ul>
                 </div>
 
             </div>
@@ -57,13 +57,13 @@
                         <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
                     </ul>
                     <div class="clearfix"></div>
-                    <!-- <ul class="ul_msg2">
+                    <ul class="ul_msg2">
                         <li><a href="#"><i class="fa fa-pencil"></i> </a></li>
                         <li><a href="#"><i class="fa fa-trash chat-trash"></i></a></li>
-                    </ul> -->
+                    </ul>
                 </div>
 
-            </div>
+            </div> -->
 
         </div>
         <div class="panel-footer">
@@ -86,13 +86,53 @@
         $(document).ready(function () {
 
             const sendMessage = function (mgs) {
+                let [dateuser,timeuser] = (new Date().toLocaleString()).split(" ")
+
+                $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--right">
+                    <div class="chatbox_timing">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-calendar"></i> ${dateuser}</a></li>
+                            <li><a href="#"><i class="fa fa-clock-o"></i> ${timeuser}</a></a></li>
+                        </ul>
+                    </div>
+                    <img src="/static/img/user.png" alt="Picture">
+                    <div class="clearfix"></div>
+                    <div class="ul_section_full">
+                        <ul class="ul_msg">
+                            <li><strong>You</strong></li>
+                            <li>${mgs}</li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>`)
+
                 $.post( "/eliza/say",
                 {
                    "input" : mgs
                 }, function( data ) {
                     console.log( data );
+                    let [date,time] = (new Date().toLocaleString()).split(" ")
+                    $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--left">
+                        <div class="chatbox_timing">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-calendar"></i> ${date}</a></li>
+                                <li><a href="#"><i class="fa fa-clock-o"></i> ${time}</a></a></li>
+                            </ul>
+                        </div>
+                        <img src="/static/img/Eliza.png" alt="Picture">
+                        <div class="clearfix"></div>
+                        <div class="ul_section_full">
+                            <ul class="ul_msg">
+                                <li><strong>Elizabot</strong></li>
+                                <li>${data}</li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>`)
                 });
             }
+            
+           
 
             var $chatbox = $('.chatbox'),
                 $chatboxTitle = $('.chatbox__title')
