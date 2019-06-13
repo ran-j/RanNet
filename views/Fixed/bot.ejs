@@ -88,6 +88,8 @@
             const sendMessage = function (mgs) {
                 let [dateuser,timeuser] = (new Date().toLocaleString()).split(" ")
 
+                $chatInput.val('')
+
                 $( ".chatbox__body" ).append(`<div class="chatbox__body__message chatbox__body__message--right">
                     <div class="chatbox_timing">
                         <ul>
@@ -131,8 +133,6 @@
                     </div>`)
                 });
             }
-            
-           
 
             var $chatbox = $('.chatbox'),
                 $chatboxTitle = $('.chatbox__title')
