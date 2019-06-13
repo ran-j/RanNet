@@ -681,7 +681,7 @@ class ElizaBot {
     }
     _init() {
         // install ref to global object
-        var global = ElizaBot.prototype.global = self;
+        var global = ElizaBot.prototype.global = this;
         // parse data and convert it from canonical form to internal use
         // prodoce synonym list
         var synPatterns = {};

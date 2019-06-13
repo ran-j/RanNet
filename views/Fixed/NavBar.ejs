@@ -34,6 +34,9 @@
                         Profile
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navDropDownLink">
+                        <% if (admin) { %>
+                            <a class="dropdown-item" href="/users">Users</a>
+                        <% } %>
                         <a class="dropdown-item" href="/changpwd">Change password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout">Logout</a>
