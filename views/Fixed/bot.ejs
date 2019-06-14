@@ -147,8 +147,11 @@
             const ScrollChat = function() {
                 document.getElementsByClassName("chatbox__body")[0].scrollTop = 50000
             }
-
-            RenderBotMessage("Hey, I'm a fork of original elizabot 1966.")
+            
+            var today = new Date()
+            var curHr = today.getHours()
+            var pref = ['Morning' , 'Afternoon', 'Evening']
+            RenderBotMessage("Good "+ pref[curHr < 12 ? 0 : curHr < 18 ? 1 : 2] +". Tell me your problems. Please terminate input with a period or a question mark.")
 
             var $chatbox = $('.chatbox'),
                 $chatboxTitle = $('.chatbox__title')
