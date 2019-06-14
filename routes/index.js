@@ -23,6 +23,9 @@ router.post('/postrannet', cors(), controller.postRanNet)
 
 router.get('/testes', controller.rantest)
 
+/* GET file. */
+router.get('/downloadfile/:filename', controller.downloadFile)
+
 router.use(LoginRequired)
 
 /* GET chat. */
@@ -42,9 +45,6 @@ router.get('/uploads', controller.uploadPage)
 
 /* GET downloads page. */
 router.get('/downloads', controller.downloadPage)
-
-/* GET file. */
-router.get('/downloadfile/:filename', controller.downloadFile)
 
 /* GET delete file. */
 router.get('/deletefile/:filename', controller.deleteFile)

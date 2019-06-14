@@ -11,7 +11,7 @@ var jwt = require('jsonwebtoken');
 var socket = require("../../SocketsApi/SocketApi")
 var bcrypt = require('bcrypt');
 
-var home = path.join(__dirname.replace("routes\\Controllers", ""), '/home');
+var home = path.join(process.cwd(), '/home');
 const DownloadFolder = path.join(home, '/files');
 
 /**
@@ -172,6 +172,7 @@ const downloadPage = (req, res, next) => {
  */
 const downloadFile = (req, res, next) => {
     let filePath = path.join(DownloadFolder, '/' + req.params.filename);
+    console.log("Solicitado baixar "+ filePath +" as "+ new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"));
     fs.access(filePath, fs.F_OK, (err) => {
         if (err) {
             console.error(err)
@@ -192,6 +193,7 @@ const downloadFile = (req, res, next) => {
  */
 const deleteFile = (req, res, next) => {
     let filePath = path.join(DownloadFolder, '/' + req.params.filename);
+    console.log("Solicitado apagar arquivo "+ filePath +" as "+ new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"));
     fs.access(filePath, fs.F_OK, (err) => {
         if (err) {
             console.error(err)
