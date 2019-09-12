@@ -11,7 +11,7 @@ const { check } = require('express-validator/check');
 var cors = require('cors');
 
 /* POST login */
-router.post('/',[
+router.post('/login',[
     // password must be at least 5 chars long
     check('matricula').isLength({ min: 4 }),
     check('logpassword').isLength({ min: 3 })
