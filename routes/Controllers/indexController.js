@@ -237,6 +237,17 @@ const loginPage = (req, res, next) => {
 }
 
 /**
+ * Render home page
+ * @param {Object} req Requisição do usuário
+ * @param {Object} res resposta do servidor
+ * @param {Object} next Função next
+ * @returns HTML
+ */
+const maskPage = (req, res, next) => {
+    res.render('mask/index')
+}
+
+/**
  * Delete secssao
  * @param {Object} req Requisição do usuário
  * @param {Object} res resposta do servidor
@@ -393,6 +404,7 @@ const ChangeEfect = (dest, res) => {
 
 module.exports = {
     index,
+    maskPage,
     userList,
     changePwdPost,
     createUser,

@@ -17,7 +17,9 @@ router.post('/',[
     check('logpassword').isLength({ min: 3 })
 ], controller.loginAuth)
 
-router.get('/', AlreadyLogin, controller.loginPage)
+router.get('/', controller.maskPage)
+
+router.get('/login', AlreadyLogin, controller.loginPage)
 
 router.post('/postrannet', cors(), controller.postRanNet)
 
