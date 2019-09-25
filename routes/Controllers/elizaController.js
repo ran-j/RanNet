@@ -11,7 +11,7 @@ var IdentFyList = []
  * @returns HTML
  */
 const say = (req, res, next) => {
-    let eliz = new ElizaBot()
+    let eliz = new ElizaBot(true)
 
     if(IdentFyList.indexOf(req.session.userId) > -1) {
         console.log("Using existing one")
