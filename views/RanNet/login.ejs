@@ -55,13 +55,11 @@
     <% } %> 
 
     <% if (errors) { %>
-      <% errors.forEach(function(msg) { %>
-          swal("oops", "<%= msg.msg %> for <%= msg.param %>", "error");
+      <% errors.forEach(function (msg) { %>
+        swal("oops", "<%= msg.msg %> for <%= msg.param %>", "error");
       <% }); %>
-    <% } %> 
+    <% } %>
 
-
-    
   </script>
 
 </body>
