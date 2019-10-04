@@ -193,35 +193,34 @@ const downloadFile = (req, res, next) => {
  */
 const deleteFile = (req, res, next) => {
     let filePath = path.join(DownloadFolder, '/' + req.params.filename);
-    console.log("Solicitado apagar arquivo "+ filePath +" as "+ new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"));
-    fs.access(filePath, fs.F_OK, (err) => {
-        if (err) {
-            console.error(err)
-            return err.syscall == "access" ? res.render('Erro/pageerro', { title: 'erro 500', msg1: 'Erro ao apagar o arquivo solicitado', msg2: 'Favor contatar o administrador do sistema.' }) : res.render('Erro/pageerro', { title: 'erro 404', msg1: 'O arquivo solicitado não existe', msg2: 'Favor contatar o administrador do sistema.' }); 
-        }
-
-        UploadModel.findOne({ link: req.params.filename }).exec((err, filea) => { 
-            if (err) { 
-                console.log(err);
-                return res.render('Erro/pageerro', { title: 'erro 500', msg1: 'Erro ao apagar o arquivo solicitado', msg2: 'Favor contatar o administrador do sistema.' });
-            }else if (!filea) {			 
-                console.log(filea);
-                res.writeHeader(200, {"Content-Type": "text/html"});  
-                res.write('<h1>Feito</h1><script>window.close();</script>');  
-                return res.end(); 
-            } else {
-                filea.status = "Apagado";
-                filea.save().then(() => {
-                    fs.unlink(filePath, (earr) => {
-                        console.log(earr)
-                    });
-                });
-                res.writeHeader(200, {"Content-Type": "text/html"});  
-                res.write('<h1>Feito</h1><script>window.close();</script>');  
-                return res.end(); 
+    UploadModel.findOne({ link: req.params.filename }).exec((err, filea) => {
+        if(err) return res.render('Erro/pageerro', { title: 'erro 500', msg1: 'BD error', msg2: 'Favor contatar o administrador do sistema.' });
+        if(!filea) return res.render('Erro/pageerro', { title: 'erro 404', msg1: 'O arquivo solicitado não existe', msg2: 'Favor contatar o administrador do sistema.' }); 
+        console.log("Solicitado apagar arquivo "+ filePath +" as "+ new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"));
+        fs.access(filePath, fs.F_OK, (err) => {
+            if (err) {
+                console.error(err)
+                return err.code == "ENOENT" ? res.render('Erro/pageerro', { title: 'erro 500', msg1: 'Erro interno ao preparar o arquivo solicitado', msg2: 'Favor contatar o administrador do sistema.' }) : res.render('Erro/pageerro', { title: 'erro 404', msg1: 'O arquivo solicitado não existe', msg2: 'Favor contatar o administrador do sistema.' }); 
             }
-        });
-        //file exists
+            filea.status = "Apagado";
+            filea.save().then(() => {
+                fs.unlink(filePath, (earr) => {
+                    if(earr) {
+                        console.error(earr)
+                        return res.render('Erro/pageerro', { title: 'erro 500', msg1: 'Erro interno ao apagar o arquivo solicitado', msg2: 'Favor contatar o administrador do sistema.' })
+                    } else {
+                        res.writeHeader(200, {"Content-Type": "text/html"});  
+                        res.write('<h1>Feito</h1><script>window.close();</script>');  
+                        return res.end(); 
+                    }
+                });
+            }).catch((er) => {
+                console.error(er)
+                res.render('Erro/pageerro', { title: 'erro 500', msg1: 'Erro interno ao salvar a exclusão de arquivo', msg2: 'Favor contatar o administrador do sistema.' })
+            })
+        
+        })
+
     })
 }
 

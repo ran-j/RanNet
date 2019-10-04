@@ -8,10 +8,35 @@
 
 	<!-- Icons core CSS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/jquery.dataTables.min.css">
 
 	<% include ../Fixed/DefaultHead.ejs %>
 
 </head>
+
+<style>
+
+#donwloadList {
+    table-layout: fixed;
+}
+
+#donwloadList td {
+    text-overflow: ellipsis;
+}
+
+#donwloadList_wrapper {
+    display: block !important;
+}
+
+.jumbotron {
+	text-align: center;
+}
+
+.table.dataTable tbody tr {
+	background-color: #212529 !important;
+}
+
+</style>
 
 <body>
 
@@ -27,7 +52,7 @@
 			<h2>Downloads!</h2>
 			<p>Lista com todos os arquivos armazenados no servidor.</p>
 
-			<table class="table table-striped table-dark">
+			<table id="donwloadList" class="table table-striped table-dark">
 				<thead class="thead-dark">
 					<tr>
 						<th>ID</th>
@@ -39,31 +64,33 @@
 				</thead>
 				<tbody>
 					<%if (donwloadslist) { %>
-						<% for(var i=0; i<donwloadslist.length; i++) { %>
-						<tr>
-							<td>
-								<%= i %>
-							</td>
-							<td>
-								<%= donwloadslist[i].name %>
-							</td>
+					<% for(var i=0; i<donwloadslist.length; i++) { %>
+					<tr>
+						<td>
+							<%= i %>
+						</td>
+						<td>
+							<%= donwloadslist[i].name %>
+						</td>
 
-							<%if (donwloadslist[i].creat_by) { %>
-								<td>
-									<%= donwloadslist[i].creat_by.name %>
-								</td>
-							<% } else { %>
-								<td> Usuário excluído </td>
-							<% } %>
-							<td>
-								<%= donwloadslist[i].created_at.toLocaleString() %>
-							</td>
-							<td class="actions">
-								<a class="fa fa-download" href="/downloadfile/<%= donwloadslist[i].link %>" target="_blank"> Baixar</a>
-								<a class="fa fa-trash" href="/deletefile/<%= donwloadslist[i].link %>" onclick="awaitAndreload()" target="_blank"> Apagar</a>
-							</td>
-						</tr>
+						<%if (donwloadslist[i].creat_by) { %>
+						<td>
+							<%= donwloadslist[i].creat_by.name %>
+						</td>
+						<% } else { %>
+						<td> Usuário excluído </td>
 						<% } %>
+						<td>
+							<%= donwloadslist[i].created_at.toLocaleString() %>
+						</td>
+						<td class="actions">
+							<a class="fa fa-download" href="/downloadfile/<%= donwloadslist[i].link %>" target="_blank">
+								Baixar</a>
+							<a class="fa fa-trash" href="/deletefile/<%= donwloadslist[i].link %>"
+								onclick="awaitAndreload()" target="_blank"> Apagar</a>
+						</td>
+					</tr>
+					<% } %>
 					<% } %>
 				</tbody>
 			</table>
@@ -74,11 +101,16 @@
 </body>
 
 <script>
- function awaitAndreload() {
-	setTimeout(function() {
-		location.reload(true)
-	},1000)
- }
+	$(document).ready(function () {
+		setTimeout(function() {
+            $("#donwloadList").DataTable();
+		}, 1000);
+	})
+	function awaitAndreload() {
+		setTimeout(function () {
+			location.reload(true)
+		}, 1000)
+	}
 </script>
 
 </html>
